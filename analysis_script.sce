@@ -17,7 +17,12 @@ load('ddbb')
 echo = %F; //%T si desea tener acceso a todos los datos creados por el programa, caso contrario reemplazar por %F
 guardar = %T; //%T si desea guardar la ejecución en la base de datos, para pruebas o casos particulares reemplazar por %F
 //Carga de datos desde trending
-
+if echo then
+    print('echo is on')
+end
+if ~guardar  then
+    print('Precaución! las variables no se guardarán en la base de datos')
+end
 Datanum = csvRead('trends.csv',';',',','double')
 Datastr = csvRead('trends.csv',';',',','string')
 
