@@ -11,18 +11,31 @@
 // El intervalo maximo de la bajada de datos NO DEBE EXCEDER los 3 días puesto que
 // Se produciran errores en el calculo de la frecuencia de muestreo producto del
 // Formato de los datos importados desde el piso de planta.
-clear
+//clear
 //Abre base de datos de variables
 load('ddbb')
-echo = %F; //%T si desea tener acceso a todos los datos creados por el programa, caso contrario reemplazar por %F
-guardar = %T; //%T si desea guardar la ejecución en la base de datos, para pruebas o casos particulares reemplazar por %F
+//echo = %F; %T si desea tener acceso a todos los datos creados por el programa, caso contrario reemplazar por %F
+//guardar = %T; //%T si desea guardar la ejecución en la base de datos, para pruebas o casos particulares reemplazar por %F
 //Carga de datos desde trending
+if echo then
+    print('echo is on')
+end
+if ~guardar  then
+    print('Precaución! las variables no se guardarán en la base de datos')
+end
 
+
+//path1='C:\Users\LGAMALER\Downloads\trends.csv';
+path2 ='C:\Users\LGAMALER\""OneDrive - TERNIUM""\Documentos\Decapado\""2019.09 - Oscilacion en centrador 6""\""Analisis de patrones en centrador 6 y centrador de piletas""\trends.csv';
+command = 'MOVE /Y '+path1+' '+path2;
+dos(command,'-echo')
 Datanum = csvRead('trends.csv',';',',','double')
 Datastr = csvRead('trends.csv',';',',','string')
 
 a = size(Datanum)
 a = a(1)
+
+datetime = Datastr(2:a,1);
 contador = Datanum(2:a,2);
 vel_centro = Datanum(2:a,3);
 c6desp = Datanum(2:a,4);
@@ -30,7 +43,8 @@ c6pos = Datanum(2:a,5);
 cpildesp = Datanum(2:a,6);
 cpilpos = Datanum(2:a,7);
 vel_salida = Datanum(2:a,8);
-datetime = Datastr(2:a,1);
+longitud_trk = Datanum(2:a,9)
+bobina_numero = input("Escriba el numero de bobina: ","string");
 
 if echo == %F then
     clear Datanum Datastr a
@@ -65,82 +79,120 @@ for i = 2:length(time)
 
     long_salida(i) = long_salida(j)+vel_salida(i)*(time(i)-time(j))
 
-    
 end
 // Fin de integración
 clear T1 T2 dt1 dt2 i j
 
 
-subplot(321)
-//Grafico de centrador 6 y centrador de piletas sin desfazaje por trayecto de chapa
-plot(time,amp_factor_pos*c6pos,'b-')
-plot(time,cpilpos,'r-')
-plot(0,240) //max eje y
-plot(0,-240) //max neg eje y
-xlabel('Tiempo [min]')
-ylabel('Posicion centradores [%]')
-title('Posición C6 y Centrador de piletas en func del tiempo')
-legend(['Centrador 6*300%';'Centrador de piletas'])
 
-subplot(325)
-//Grafico de velocidad sobre tiempo
-plot(time,vel_centro,'r-')
-plot(time,vel_salida,'b-')
-plot(0,240) //max eje y
-//plot(0,-240) //max neg eje y
 
-ylabel('Velocidad [m/min]')
-title('Velocidad de la línea, Centro y salida')
-legend(['Centrador de Pileta (BR3)';'Centrador 6 (BR4)'])
 
-subplot(326)
-//Grafico de contador de alarma
-plot(time,contador,'r*')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//subplot(321)
+////Grafico de centrador 6 y centrador de piletas sin desfazaje por trayecto de chapa
+//plot(time,amp_factor_pos*c6pos,'b-')
+//plot(time,cpilpos,'r-')
 //plot(0,240) //max eje y
 //plot(0,-240) //max neg eje y
+//xlabel('Tiempo [min]')
+//ylabel('Posicion centradores [%]')
+//title('Posición C6 y Centrador de piletas en func del tiempo')
+//legend(['Centrador 6*300%';'Centrador de piletas'])
+//
+//subplot(325)
+////Grafico de velocidad sobre tiempo
+//plot(time,vel_centro,'r-')
+//plot(time,vel_salida,'b-')
+//plot(0,240) //max eje y
+////plot(0,-240) //max neg eje y
+//
+//ylabel('Velocidad [m/min]')
+//title('Velocidad de la línea, Centro y salida')
+//legend(['Centrador de Pileta (BR3)';'Centrador 6 (BR4)'])
+//
+//subplot(326)
+////Grafico de contador de alarma
+//plot(time,contador,'r*')
+////plot(0,240) //max eje y
+////plot(0,-240) //max neg eje y
+//
+//ylabel('Contador')
+//title('Contador de activacion de lógica')
+////legend(['Centrador 6';'Centrador de piletas'])
+//
+//subplot(323)
+////Grafico de desplazamiento en centrador 6 y centrador de piletas sin desfazaje por trayecto de chapa
+//plot(time,-cpildesp,'r-')
+//plot(time,amp_factor_desp*c6desp,'b-')
+//plot(0,240) //max eje y
+//plot(0,-240) //max neg eje y
+//
+//ylabel('Desplazamiento de chapa [mm]')
+//title('Posición C6 y Centrador de piletas por trending')
+//legend(['Centrador de piletas';'Centrador 6*500%'])
+//
+//subplot(322)
+////Grafico de centrador 6 y centrador de piletas con desfazaje por trayecto de chapa
+//plot(long_salida,amp_factor_pos*c6pos,'b-')
+//plot(long_centro,cpilpos,'r-')
+//plot(0,240) //max eje y
+//plot(0,-240) //max neg eje y
+//xlabel('Metros de chapa [m]')
+//ylabel('Posicion centradores [%]')
+//title('Posición C6 y Centrador de piletas por metro de chapa')
+//legend(['Centrador 6*300%';'Centrador de piletas'])
+//
+//subplot(324)
+////Grafico de desplazamiento en centrador 6 y centrador de piletas sin desfazaje por trayecto de chapa
+//plot(long_centro,cpildesp,'r-')
+//plot(long_salida,amp_factor_desp*c6desp,'b-')
+//plot(0,240) //max eje y
+//plot(0,-240) //max neg eje y
+//xlabel('Metros de chapa [m]')
+//ylabel('Desplazamiento de chapa [mm]')
+//title('Desplazamiento en C6 y Centrador de piletas por metro de chapa')
+//legend(['Centrador de piletas';'Centrador 6*500%'])
 
-ylabel('Contador')
-title('Contador de activacion de lógica')
-//legend(['Centrador 6';'Centrador de piletas'])
 
-subplot(323)
-//Grafico de desplazamiento en centrador 6 y centrador de piletas sin desfazaje por trayecto de chapa
-plot(time,-cpildesp,'r-')
-plot(time,amp_factor_desp*c6desp,'b-')
-plot(0,240) //max eje y
-plot(0,-240) //max neg eje y
 
-ylabel('Desplazamiento de chapa [mm]')
-title('Posición C6 y Centrador de piletas por trending')
-legend(['Centrador de piletas';'Centrador 6*500%'])
 
-subplot(322)
-//Grafico de centrador 6 y centrador de piletas con desfazaje por trayecto de chapa
-plot(long_salida,amp_factor_pos*c6pos,'b-')
-plot(long_centro,cpilpos,'r-')
-plot(0,240) //max eje y
-plot(0,-240) //max neg eje y
-xlabel('Metros de chapa [m]')
-ylabel('Posicion centradores [%]')
-title('Posición C6 y Centrador de piletas por metro de chapa')
-legend(['Centrador 6*300%';'Centrador de piletas'])
 
-subplot(324)
-//Grafico de desplazamiento en centrador 6 y centrador de piletas sin desfazaje por trayecto de chapa
-plot(long_centro,cpildesp,'r-')
-plot(long_salida,amp_factor_desp*c6desp,'b-')
-plot(0,240) //max eje y
-plot(0,-240) //max neg eje y
-xlabel('Metros de chapa [m]')
-ylabel('Desplazamiento de chapa [mm]')
-title('Desplazamiento en C6 y Centrador de piletas por metro de chapa')
-legend(['Centrador de piletas';'Centrador 6*500%'])
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 //Guardado de variables desde archivo
 save('variables')
 clear ans
-
 //Guardado de base de datos
 
 if guardar == %T then 
@@ -158,6 +210,8 @@ if guardar == %T then
     time_db = [time_db,time];
     vel_centro_db = [vel_centro_db,vel_centro];
     vel_salida_db = [vel_salida_db,vel_salida];
+    longitud_trk_db = [longitud_trk,longitud_trk];
+    bobina_numero_db = [bobina_numero,bobina_numero];
     save('ddbb')
 end
 if echo == %F then
