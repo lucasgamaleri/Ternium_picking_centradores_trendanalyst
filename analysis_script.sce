@@ -11,10 +11,10 @@
 // El intervalo maximo de la bajada de datos NO DEBE EXCEDER los 3 días puesto que
 // Se produciran errores en el calculo de la frecuencia de muestreo producto del
 // Formato de los datos importados desde el piso de planta.
-//clear
+clear
 //Abre base de datos de variables
 load('ddbb')
-echo = %F; %T si desea tener acceso a todos los datos creados por el programa, caso contrario reemplazar por %F
+echo = %F; // %T si desea tener acceso a todos los datos creados por el programa, caso contrario reemplazar por %F
 guardar = %T; //%T si desea guardar la ejecución en la base de datos, para pruebas o casos particulares reemplazar por %F
 //Carga de datos desde trending
 if echo then
