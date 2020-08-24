@@ -11,10 +11,10 @@
 // El intervalo maximo de la bajada de datos NO DEBE EXCEDER los 3 días puesto que
 // Se produciran errores en el calculo de la frecuencia de muestreo producto del
 // Formato de los datos importados desde el piso de planta.
-clear
+//clear
 //Abre base de datos de variables
 load('ddbb')
-echo = %F; // %T si desea tener acceso a todos los datos creados por el programa, caso contrario reemplazar por %F
+echo = %F;// %T si desea tener acceso a todos los datos creados por el programa, caso contrario reemplazar por %F
 guardar = %T; //%T si desea guardar la ejecución en la base de datos, para pruebas o casos particulares reemplazar por %F
 //Carga de datos desde trending
 if echo then
@@ -116,13 +116,17 @@ legend(['Centrador de Pileta (BR3)';'Centrador 6 (BR4)'])
 
 subplot(326)
 //Grafico de contador de alarma
-plot(time,contador,'r*')
+//plot(time,contador,'r*')
 //plot(0,240) //max eje y
 //plot(0,-240) //max neg eje y
-
-ylabel('Contador')
-title('Contador de activacion de lógica')
+//ylabel('Contador')
+//title('Contador de activacion de lógica')
 //legend(['Centrador 6';'Centrador de piletas'])
+//Grafico de Longitud por tracking
+plot(time,longitud_trk,'b-')
+ylabel('m')
+title('Longitud trk salida')
+
 
 subplot(323)
 //Grafico de desplazamiento en centrador 6 y centrador de piletas sin desfazaje por trayecto de chapa
@@ -184,12 +188,12 @@ if guardar == %T then
     time_db = [time_db,time];
     vel_centro_db = [vel_centro_db,vel_centro];
     vel_salida_db = [vel_salida_db,vel_salida];
-    longitud_trk_db = [longitud_trk,longitud_trk];
-    bobina_numero_db = [bobina_numero,bobina_numero];
+    longitud_trk_db = [longitud_trk_db,longitud_trk];
+    bobina_numero_db = [bobina_numero_db,bobina_numero];
     save('ddbb')
 end
 if echo == %F then
-    clear amp_factor_desp amp_factor_pos c6desp c6pos contador cpildesp cpilpos frequency_min frequency_seq long_centro long_salida time vel_centro vel_salida
+    clear amp_factor_desp amp_factor_pos c6desp c6pos contador cpildesp cpilpos frequency_min frequency_seq long_centro long_salida time vel_centro vel_salida longitud_trk bobina_numero
 end
 
 clear ans

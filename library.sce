@@ -97,3 +97,74 @@ function derivar(variable,n)
     end
     var = resume(var);
 endfunction
+
+function graficar(n)
+    subplot(321)
+    //Grafico de centrador 6 y centrador de piletas sin desfazaje por trayecto de chapa
+    plot(time_db(:,n),amp_factor_pos_db(:,n)*c6pos_db(:,n),'b-')
+    plot(time_db(:,n),cpilpos_db(:,n),'r-')
+    plot(0,240) //max eje y
+    plot(0,-240) //max neg eje y
+    xlabel('Tiempo [min]')
+    ylabel('Posicion centradores [%]')
+    title('Posición C6 y Centrador de piletas en func del tiempo')
+    legend(['Centrador 6*300%';'Centrador de piletas'])
+
+    subplot(325)
+    //Grafico de velocidad sobre tiempo
+    plot(time_db(:,n),vel_centro_db(:,n),'r-')
+    plot(time_db(:,n),vel_salida_db(:,n),'b-')
+    plot(0,240) //max eje y
+    //plot(0,-240) //max neg eje y
+
+    ylabel('Velocidad [m/min]')
+    title('Velocidad de la línea, Centro y salida')
+    legend(['Centrador de Pileta (BR3)';'Centrador 6 (BR4)'])
+
+    subplot(326)
+    //Grafico de contador de alarma
+    //plot(time,contador,'r*')
+    //plot(0,240) //max eje y
+    //plot(0,-240) //max neg eje y
+    //ylabel('Contador')
+    //title('Contador de activacion de lógica')
+    //legend(['Centrador 6';'Centrador de piletas'])
+    //Grafico de Longitud por tracking
+    plot(time_db(:,n),longitud_trk_db(:,n),'b-')
+    ylabel('m')
+    title('Longitud trk salida')
+
+    subplot(323)
+    //Grafico de desplazamiento en centrador 6 y centrador de piletas sin desfazaje por trayecto de chapa
+    plot(time_db(:,n),-cpildesp_db(:,n),'r-')
+    plot(time_db(:,n),amp_factor_desp_db(:,n)*c6desp_db(:,n),'b-')
+    plot(0,240) //max eje y
+    plot(0,-240) //max neg eje y
+
+    ylabel('Desplazamiento de chapa [mm]')
+    title('Posición C6 y Centrador de piletas por trending')
+    legend(['Centrador de piletas';'Centrador 6*500%'])
+
+    subplot(322)
+    //Grafico de centrador 6 y centrador de piletas con desfazaje por trayecto de chapa
+    plot(long_salida_db(:,n),amp_factor_pos_db(:,n)*c6pos_db(:,n),'b-')
+    plot(long_centro_db(:,n)+85,cpilpos_db(:,n),'r-')
+    plot(0,240) //max eje y
+    plot(0,-240) //max neg eje y
+    xlabel('Metros de chapa [m]')
+    ylabel('Posicion centradores [%]')
+    title('Posición C6 y Centrador de piletas por metro de chapa')
+    legend(['Centrador 6*300%';'Centrador de piletas'])
+
+    subplot(324)
+    //Grafico de desplazamiento en centrador 6 y centrador de piletas sin desfazaje por trayecto de chapa
+    plot(long_centro_db(:,n)+85,cpildesp_db(:,n),'r-')
+    plot(long_salida_db(:,n),amp_factor_desp_db(:,n)*c6desp_db(:,n),'b-')
+    plot(0,240) //max eje y
+    plot(0,-240) //max neg eje y
+    xlabel('Metros de chapa [m]')
+    ylabel('Desplazamiento de chapa [mm]')
+    title('Desplazamiento en C6 y Centrador de piletas por metro de chapa')
+    legend(['Centrador de piletas';'Centrador 6*500%'])
+
+endfunction
